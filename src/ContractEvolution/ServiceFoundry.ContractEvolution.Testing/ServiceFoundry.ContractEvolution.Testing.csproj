@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <PackageId>ServiceFoundry.ContractEvolution.Testing</PackageId>
+    <Description>Test helpers for ServiceFoundry.ContractEvolution — assertion extensions for upgrade plans, compatibility results, and contract registration validation in unit and integration tests.</Description>
+    <PackageTags>contracts;versioning;testing;dotnet;testhelpers</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" Condition="Exists('..\README.md')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceFoundry.ContractEvolution\ServiceFoundry.ContractEvolution.csproj" />
+  </ItemGroup>
+
+</Project>

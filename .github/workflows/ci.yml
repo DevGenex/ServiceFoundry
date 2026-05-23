@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    name: Build & Test (.NET ${{ matrix.dotnet }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet: [ "8.0.x" ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history for SourceLink
+
+      - name: Setup .NET ${{ matrix.dotnet }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+
+      - name: Restore
+        run: dotnet restore ServiceFoundry.slnx
+
+      - name: Build
+        run: dotnet build ServiceFoundry.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test ServiceFoundry.slnx --no-build --configuration Release --logger "trx;LogFileName=results.trx" --results-directory ./test-results
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Test Results (.NET ${{ matrix.dotnet }})
+          path: "./test-results/*.trx"
+          reporter: dotnet-trx

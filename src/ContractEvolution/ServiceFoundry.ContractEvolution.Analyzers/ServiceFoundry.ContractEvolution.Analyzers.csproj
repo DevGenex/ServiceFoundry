@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <NoWarn>$(NoWarn);RS2008</NoWarn>
+    <Version>0.1.0</Version>
+    <PackageId>ServiceFoundry.ContractEvolution.Analyzers</PackageId>
+    <Description>Roslyn analyzer for ServiceFoundry.ContractEvolution — SFCE001 catches Map&lt;TFrom,TTo&gt; calls where target properties are not explicitly bound, default-assigned, or copied from a same-named source property.</Description>
+    <PackageTags>contracts;versioning;analyzer;roslyn;codeanalysis;dotnet</PackageTags>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" Condition="Exists('..\README.md')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

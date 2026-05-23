@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <PackageId>ServiceFoundry.ContractEvolution.Reporting</PackageId>
+    <Description>Report writers for ServiceFoundry.ContractEvolution — generate human-readable text or structured JSON reports of your registered contract families, versions, and upgrade paths.</Description>
+    <PackageTags>contracts;versioning;reporting;json;dotnet</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" Condition="Exists('..\README.md')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceFoundry.ContractEvolution\ServiceFoundry.ContractEvolution.csproj" />
+  </ItemGroup>
+
+</Project>

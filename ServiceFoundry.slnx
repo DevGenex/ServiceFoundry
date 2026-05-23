@@ -1,0 +1,35 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/ConfigGuard/">
+    <Project Path="src/ConfigGuard/ServiceFoundry.ConfigGuard.Hosting/ServiceFoundry.ConfigGuard.Hosting.csproj" />
+    <Project Path="src/ConfigGuard/ServiceFoundry.ConfigGuard/ServiceFoundry.ConfigGuard.csproj" />
+  </Folder>
+  <Folder Name="/src/ContractEvolution/">
+    <Project Path="src/ContractEvolution/ServiceFoundry.ContractEvolution.Analyzers/ServiceFoundry.ContractEvolution.Analyzers.csproj" />
+    <Project Path="src/ContractEvolution/ServiceFoundry.ContractEvolution.AspNetCore/ServiceFoundry.ContractEvolution.AspNetCore.csproj" />
+    <Project Path="src/ContractEvolution/ServiceFoundry.ContractEvolution.Reporting/ServiceFoundry.ContractEvolution.Reporting.csproj" />
+    <Project Path="src/ContractEvolution/ServiceFoundry.ContractEvolution.Testing/ServiceFoundry.ContractEvolution.Testing.csproj" />
+    <Project Path="src/ContractEvolution/ServiceFoundry.ContractEvolution/ServiceFoundry.ContractEvolution.csproj" />
+  </Folder>
+  <Folder Name="/src/ReliableMessages/">
+    <Project Path="src/ReliableMessages/ServiceFoundry.ReliableMessages.EFCore/ServiceFoundry.ReliableMessages.EFCore.csproj" />
+    <Project Path="src/ReliableMessages/ServiceFoundry.ReliableMessages.RabbitMQ/ServiceFoundry.ReliableMessages.RabbitMQ.csproj" />
+    <Project Path="src/ReliableMessages/ServiceFoundry.ReliableMessages/ServiceFoundry.ReliableMessages.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/ConfigGuard/">
+    <Project Path="tests/ConfigGuard/ServiceFoundry.ConfigGuard.Hosting.Tests/ServiceFoundry.ConfigGuard.Hosting.Tests.csproj" />
+    <Project Path="tests/ConfigGuard/ServiceFoundry.ConfigGuard.Tests/ServiceFoundry.ConfigGuard.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/ContractEvolution/">
+    <Project Path="tests/ContractEvolution/ServiceFoundry.ContractEvolution.Analyzers.Tests/ServiceFoundry.ContractEvolution.Analyzers.Tests.csproj" />
+    <Project Path="tests/ContractEvolution/ServiceFoundry.ContractEvolution.AspNetCore.Tests/ServiceFoundry.ContractEvolution.AspNetCore.Tests.csproj" />
+    <Project Path="tests/ContractEvolution/ServiceFoundry.ContractEvolution.Reporting.Tests/ServiceFoundry.ContractEvolution.Reporting.Tests.csproj" />
+    <Project Path="tests/ContractEvolution/ServiceFoundry.ContractEvolution.Tests/ServiceFoundry.ContractEvolution.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/ReliableMessages/">
+    <Project Path="tests/ReliableMessages/ServiceFoundry.ReliableMessages.EFCore.Tests/ServiceFoundry.ReliableMessages.EFCore.Tests.csproj" />
+    <Project Path="tests/ReliableMessages/ServiceFoundry.ReliableMessages.RabbitMQ.Tests/ServiceFoundry.ReliableMessages.RabbitMQ.Tests.csproj" />
+    <Project Path="tests/ReliableMessages/ServiceFoundry.ReliableMessages.Tests/ServiceFoundry.ReliableMessages.Tests.csproj" />
+  </Folder>
+</Solution>

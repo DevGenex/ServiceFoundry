@@ -1,0 +1,72 @@
+name: Publish to NuGet
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+jobs:
+  pack-and-publish:
+    name: Pack & Publish
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore ServiceFoundry.slnx
+
+      - name: Build
+        run: dotnet build ServiceFoundry.slnx --no-restore --configuration Release
+
+      - name: Test
+        run: dotnet test ServiceFoundry.slnx --no-build --configuration Release
+
+      - name: Pack — ConfigGuard
+        run: |
+          dotnet pack src/ConfigGuard/ServiceFoundry.ConfigGuard/ServiceFoundry.ConfigGuard.csproj \
+            --no-build --configuration Release --output ./nupkgs
+          dotnet pack src/ConfigGuard/ServiceFoundry.ConfigGuard.Hosting/ServiceFoundry.ConfigGuard.Hosting.csproj \
+            --no-build --configuration Release --output ./nupkgs
+
+      - name: Pack — ReliableMessages
+        run: |
+          dotnet pack src/ReliableMessages/ServiceFoundry.ReliableMessages/ServiceFoundry.ReliableMessages.csproj \
+            --no-build --configuration Release --output ./nupkgs
+          dotnet pack src/ReliableMessages/ServiceFoundry.ReliableMessages.EFCore/ServiceFoundry.ReliableMessages.EFCore.csproj \
+            --no-build --configuration Release --output ./nupkgs
+          dotnet pack src/ReliableMessages/ServiceFoundry.ReliableMessages.RabbitMQ/ServiceFoundry.ReliableMessages.RabbitMQ.csproj \
+            --no-build --configuration Release --output ./nupkgs
+
+      - name: Pack — ContractEvolution
+        run: |
+          dotnet pack src/ContractEvolution/ServiceFoundry.ContractEvolution/ServiceFoundry.ContractEvolution.csproj \
+            --no-build --configuration Release --output ./nupkgs
+          dotnet pack src/ContractEvolution/ServiceFoundry.ContractEvolution.AspNetCore/ServiceFoundry.ContractEvolution.AspNetCore.csproj \
+            --no-build --configuration Release --output ./nupkgs
+          dotnet pack src/ContractEvolution/ServiceFoundry.ContractEvolution.Testing/ServiceFoundry.ContractEvolution.Testing.csproj \
+            --no-build --configuration Release --output ./nupkgs
+          dotnet pack src/ContractEvolution/ServiceFoundry.ContractEvolution.Reporting/ServiceFoundry.ContractEvolution.Reporting.csproj \
+            --no-build --configuration Release --output ./nupkgs
+          dotnet pack src/ContractEvolution/ServiceFoundry.ContractEvolution.Analyzers/ServiceFoundry.ContractEvolution.Analyzers.csproj \
+            --no-build --configuration Release --output ./nupkgs
+
+      - name: Push to NuGet.org
+        run: |
+          dotnet nuget push "./nupkgs/*.nupkg" \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}

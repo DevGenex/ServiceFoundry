@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Version>0.1.0</Version>
+    <PackageId>ServiceFoundry.ReliableMessages.EFCore</PackageId>
+    <Description>Entity Framework Core persistence for ServiceFoundry.ReliableMessages — durable outbox/inbox stores and SaveChangesAndEnqueueAsync for same-transaction message publishing.</Description>
+    <PackageTags>messaging;outbox;inbox;efcore;entityframework;dotnet</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="README.md" Condition="Exists('..\README.md')" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceFoundry.ReliableMessages\ServiceFoundry.ReliableMessages.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.11" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+  </ItemGroup>
+
+</Project>
