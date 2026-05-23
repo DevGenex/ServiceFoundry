@@ -2,13 +2,19 @@
 
 Pragmatic outbox/inbox runtime for .NET services — durable at-least-once publish, inbox deduplication, retry, dead-letter, and pluggable transport. No external coordinator required.
 
+## Why use ReliableMessages?
+
+The classic dual-write problem: you save an `Order` to your database and then publish an `OrderPlaced` event to RabbitMQ. If the process crashes between the two, either the order is saved but no event is published, or — with a reversed order — an event fires for an order that was never persisted. ReliableMessages solves this with the outbox pattern: the message is written to the database **in the same transaction** as your domain data, and a background worker delivers it afterwards.
+
+**Typical scenario:** An e-commerce service places orders and publishes `OrderPlaced` events for downstream fulfilment and notification services. `SaveChangesAndEnqueueAsync` ensures that if the database commits, the event will eventually be delivered — even if the pod restarts immediately after.
+
 ## Packages
 
-| Package | Purpose |
-|---|---|
-| `ServiceFoundry.ReliableMessages` | Core outbox/inbox runtime and abstractions |
-| `ServiceFoundry.ReliableMessages.EFCore` | EF Core persistence and same-transaction enqueue |
-| `ServiceFoundry.ReliableMessages.RabbitMQ` | RabbitMQ transport |
+| Package | NuGet | Use case |
+|---|---|---|
+| `ServiceFoundry.ReliableMessages` | [![NuGet](https://img.shields.io/nuget/v/ServiceFoundry.ReliableMessages)](https://www.nuget.org/packages/ServiceFoundry.ReliableMessages) | Core abstractions, outbox/inbox runtime, and background dispatcher. Required by all other packages. |
+| `ServiceFoundry.ReliableMessages.EFCore` | [![NuGet](https://img.shields.io/nuget/v/ServiceFoundry.ReliableMessages.EFCore)](https://www.nuget.org/packages/ServiceFoundry.ReliableMessages.EFCore) | Persists the outbox in your existing EF Core `DbContext`. Provides `SaveChangesAndEnqueueAsync` for atomic enqueue. |
+| `ServiceFoundry.ReliableMessages.RabbitMQ` | [![NuGet](https://img.shields.io/nuget/v/ServiceFoundry.ReliableMessages.RabbitMQ)](https://www.nuget.org/packages/ServiceFoundry.ReliableMessages.RabbitMQ) | Publishes outbox messages to a RabbitMQ topic exchange with automatic reconnect on dropped connections. |
 
 ## Install
 
@@ -42,7 +48,7 @@ public sealed class OrderPlacedHandler : IMessageHandler<OrderPlaced>
 }
 ```
 
-With RabbitMQ transport:
+### Adding RabbitMQ transport
 
 ```csharp
 builder.Services
@@ -54,6 +60,20 @@ builder.Services
     })
     .AddDispatcher();
 ```
+
+## Package details
+
+### `ServiceFoundry.ReliableMessages`
+
+The core runtime. Defines `IOutboxMessage`, `IMessageHandler<T>`, `IOutboxPublisher`, and the background `OutboxDispatcher` hosted service. Transport-agnostic — wire up any `IMessageTransport` implementation. Includes OpenTelemetry `ActivitySource` and `Meter` for distributed tracing and metrics out of the box.
+
+### `ServiceFoundry.ReliableMessages.EFCore`
+
+Adds an `OutboxMessage` entity to your existing `DbContext` (via owned entity or a separate table) and provides `SaveChangesAndEnqueueAsync`, which writes your domain changes and the outbox row in a single `IDbContextTransaction`. No second database connection, no distributed transaction — just one commit.
+
+### `ServiceFoundry.ReliableMessages.RabbitMQ`
+
+Implements `IMessageTransport` over `RabbitMQ.Client`. Publishes to a topic exchange with full `trace-id` / `causation-id` header propagation. The underlying AMQP connection and channel are lazily created and transparently recreated if the broker drops the connection — your outbox dispatcher keeps running through transient RabbitMQ restarts.
 
 ## Delivery guarantees
 
